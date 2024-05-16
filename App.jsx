@@ -34,6 +34,17 @@ export default function App() {
 		return newDice
 	}
 
+	const resetGame = () => {
+		setDice(allNewDice())
+		setTenzies(false)
+		setRolls(0)
+	}
+
+	const resetHighScore = () => {
+		setHighScore(Infinity)
+		localStorage.removeItem('highScore')
+	}
+
 	function rollDice() {
 		if (!tenzies) {
 			setDice((oldDice) =>
@@ -43,9 +54,7 @@ export default function App() {
 			)
 			setRolls(rolls + 1)
 		} else {
-			setTenzies(false)
-			setDice(allNewDice())
-			setRolls(0)
+			resetGame()
 		}
 	}
 
@@ -86,9 +95,17 @@ export default function App() {
 			</h2>
 			<p className="rolls">Rolls: {rolls}</p>
 			<div className="dice-container">{diceElements}</div>
-			<button className="roll-dice" onClick={rollDice}>
-				{tenzies ? 'New Game' : 'Roll'}
-			</button>
+			<div className="buttons-container">
+				<button className="resetGame" onClick={resetGame}>
+					Reset Game
+				</button>
+				<button className="roll-dice" onClick={rollDice}>
+					{tenzies ? 'New Game' : 'Roll'}
+				</button>
+				<button className="resetHighScore" onClick={resetHighScore}>
+					Reset HighScore
+				</button>
+			</div>
 		</main>
 	)
 }
