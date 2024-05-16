@@ -1,0 +1,19 @@
+{
+	"name": "tenzies",
+	"dependencies": {
+		"nanoid": "^5.0.7",
+		"react": "^18.3.1",
+		"react-confetti": "^6.1.0",
+		"react-dom": "^18.3.1"
+	},
+	"devDependencies": {
+		"@vitejs/plugin-react": "*",
+		"vite": "latest"
+	},
+	"scripts": {
+		"start": "vite",
+		"dev": "vite",
+		"build": "vite build",
+		"preview": "vite preview"
+	}
+}
