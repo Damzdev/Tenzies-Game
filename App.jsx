@@ -21,7 +21,7 @@ export default function App() {
 		'Black & Yellow': '#FFEB3B',
 		'Black & Red': '#F44336',
 		'Black & Green': '#98fb98',
-		'Black & White': '#FFFFFF',
+		'Black & White': '#98fb98',
 	}
 
 	const currentThemeColor = themeColors[currentTheme]
@@ -123,6 +123,7 @@ export default function App() {
 
 	// Function to start the game
 	function startGame() {
+		setDice(allNewDice())
 		setGameState(true)
 		setRolls(0)
 		setTenzies(false)
