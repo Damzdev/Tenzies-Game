@@ -1,7 +1,8 @@
 import React from 'react'
-import Die from './Die'
+import Die from './components/Die'
 import { nanoid } from 'nanoid'
 import Confetti from 'react-confetti'
+import './styles/style.css' // Default styles
 
 export default function App() {
 	const [dice, setDice] = React.useState(allNewDice())
@@ -13,8 +14,10 @@ export default function App() {
 	})
 	const [gameState, setGameState] = React.useState(false)
 	const [timer, setTimer] = React.useState(30)
+	const [displayMenu, setDisplayMenu] = React.useState(false)
+	const [currentTheme, setCurrentTheme] = React.useState('Black & White')
 
-	// Win condition might not need this
+	// Win condition
 	React.useEffect(() => {
 		const allHeld = dice.every((die) => die.isHeld)
 		const firstValue = dice[0].value
@@ -25,10 +28,8 @@ export default function App() {
 			setGameState(false)
 		}
 	}, [dice])
-	//const firstValue = dice[0].value
-	//const allSameValue = dice.every((die) => die.value === firstValue)
 
-	// Setting timer to be 60 when a new game starts
+	// Setting timer to be 30 when a new game starts
 	React.useEffect(() => {
 		if (gameState) {
 			setTimer(30)
@@ -44,7 +45,7 @@ export default function App() {
 			}, 1000)
 		} else if (tenzies) {
 			clearInterval(timerInterval)
-			alert('You win!, Click Start Game to start a new game')
+			alert('You win! Click Start Game to start a new game')
 		} else if (timer === 0) {
 			clearInterval(timerInterval)
 			setGameState(false)
@@ -52,6 +53,37 @@ export default function App() {
 		}
 		return () => clearInterval(timerInterval)
 	}, [gameState, timer, tenzies])
+
+	// Dynamically loading theme CSS
+	React.useEffect(() => {
+		const link = document.createElement('link')
+		link.rel = 'stylesheet'
+		link.type = 'text/css'
+		link.href = getThemeCSSFile(currentTheme)
+
+		document.head.appendChild(link)
+
+		// Clean up previous theme
+		return () => {
+			document.head.removeChild(link)
+		}
+	}, [currentTheme])
+
+	// Function to get the CSS file path based on the theme
+	const getThemeCSSFile = (theme) => {
+		switch (theme) {
+			case 'Black & Yellow':
+				return './styles/black-and-yellow-theme.css'
+			case 'Black & Red':
+				return './styles/black-and-red-theme.css'
+			case 'Black & Green':
+				return './styles/black-and-green-theme.css'
+			case 'Black & White':
+				return './styles/black-and-white-theme.css'
+			default:
+				return './styles/style.css'
+		}
+	}
 
 	// Roll new dice if not held
 	function generateNewDice() {
@@ -103,6 +135,21 @@ export default function App() {
 		}
 	}
 
+	// Displaying Theme Menu
+	function showMenu() {
+		if (!displayMenu) {
+			setDisplayMenu(true)
+		} else {
+			return setDisplayMenu(false)
+		}
+	}
+
+	// Shows Active Theme
+	function activeTheme(theme) {
+		setCurrentTheme(theme)
+		console.log(theme)
+	}
+
 	// Hold dice function
 	function holdDice(id) {
 		setDice((oldDice) =>
@@ -133,10 +180,43 @@ export default function App() {
 	return (
 		<main>
 			{tenzies && <Confetti />}
+			<div className="dropdown" onClick={showMenu}>
+				<div className="select">
+					<span className="selected">{currentTheme}</span>
+					<div className="caret"></div>
+				</div>
+				{displayMenu && (
+					<ul className="menu">
+						<li
+							className={currentTheme === 'Black & Red' ? 'active' : ''}
+							onClick={() => activeTheme('Black & Red')}
+						>
+							Black & Red
+						</li>
+						<li
+							className={currentTheme === 'Black & Green' ? 'active' : ''}
+							onClick={() => activeTheme('Black & Green')}
+						>
+							Black & Green
+						</li>
+						<li
+							className={currentTheme === 'Black & White' ? 'active' : ''}
+							onClick={() => activeTheme('Black & White')}
+						>
+							Black & White
+						</li>
+						<li
+							className={currentTheme === 'Black & Yellow' ? 'active' : ''}
+							onClick={() => activeTheme('Black & Yellow')}
+						>
+							Black & Yellow
+						</li>
+					</ul>
+				)}
+			</div>
 			<h1 className="title">Tenzies</h1>
-			{<h3></h3>}
 			<p className="instructions">
-				Roll until all dice are the same. Click each die to freeze it at its
+				Roll until all dice are the same. Click a dice to freeze it at its
 				current value between rolls.
 			</p>
 			{gameState && <h3>Time left: {timer} seconds</h3>}
