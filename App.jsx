@@ -2,7 +2,7 @@ import React from 'react'
 import Die from './components/Die'
 import { nanoid } from 'nanoid'
 import Confetti from 'react-confetti'
-import './styles/style.css' // Default styles
+import './styles/style.css'
 
 export default function App() {
 	const [dice, setDice] = React.useState(allNewDice())
@@ -16,6 +16,15 @@ export default function App() {
 	const [timer, setTimer] = React.useState(30)
 	const [displayMenu, setDisplayMenu] = React.useState(false)
 	const [currentTheme, setCurrentTheme] = React.useState('Black & White')
+
+	const themeColors = {
+		'Black & Yellow': '#FFEB3B',
+		'Black & Red': '#F44336',
+		'Black & Green': '#98fb98',
+		'Black & White': '#FFFFFF',
+	}
+
+	const currentThemeColor = themeColors[currentTheme]
 
 	// Win condition
 	React.useEffect(() => {
@@ -45,7 +54,6 @@ export default function App() {
 			}, 1000)
 		} else if (tenzies) {
 			clearInterval(timerInterval)
-			alert('You win! Click Start Game to start a new game')
 		} else if (timer === 0) {
 			clearInterval(timerInterval)
 			setGameState(false)
@@ -118,7 +126,6 @@ export default function App() {
 		setGameState(true)
 		setRolls(0)
 		setTenzies(false)
-		console.log('game has started')
 	}
 
 	// Roll dice function and resets the game
@@ -147,7 +154,6 @@ export default function App() {
 	// Shows Active Theme
 	function activeTheme(theme) {
 		setCurrentTheme(theme)
-		console.log(theme)
 	}
 
 	// Hold dice function
@@ -174,6 +180,7 @@ export default function App() {
 			value={die.value}
 			isHeld={die.isHeld}
 			holdDice={() => holdDice(die.id)}
+			themeColor={currentThemeColor}
 		/>
 	))
 
@@ -221,7 +228,10 @@ export default function App() {
 			</p>
 			{gameState && <h3>Time left: {timer} seconds</h3>}
 			<h2 className="highScore">
-				High Score: {highScore === Infinity ? '-' : highScore}
+				High Score:{' '}
+				<span className="highscore-num">
+					{highScore === Infinity ? '-' : highScore}
+				</span>
 			</h2>
 			<p className="rolls">Rolls: {rolls}</p>
 			<div className="dice-container">{diceElements}</div>

@@ -141,6 +141,10 @@ main {
 	color: black;
 }
 
+.highscore-num {
+	color: white;
+}
+
 .buttons-container {
 	display: flex;
 }
