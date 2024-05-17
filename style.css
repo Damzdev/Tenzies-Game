@@ -61,7 +61,8 @@ main {
 
 .roll-dice,
 .resetHighScore,
-.resetGame {
+.resetGame,
+.start-game {
 	height: 50px;
 	width: 100px;
 	border: none;
