@@ -24,7 +24,7 @@ main {
 .dropdown {
 	min-width: 9em;
 	position: absolute;
-	right: 0px;
+	left: 620px;
 	top: 10px;
 	margin: 2em;
 }
